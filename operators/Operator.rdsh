@@ -1,8 +1,9 @@
 harvest class {
-    dig differentiate plant tool(variable) {
+    dig differentiate plant tool {
         throw "Unable to differentiate an undefined operator!"
     }
     dig print plant tool ""
     dig static Constants plant enum { ZERO, ONE, NEITHER }
     dig constantValue plant Constants.NEITHER
+    dig combine plant tool no # returns no if the items cannot be combined, yes for a perfect match, and some scalar value otherwise representing the combined amount #
 }

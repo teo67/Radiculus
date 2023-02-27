@@ -1,27 +1,50 @@
 dig Operator plant import "Operator"
 dig Constant plant import "Constant"
 dig Sum plant import "Sum"
+dig compareArrayHelper plant import "compareArrayHelper"
 dig Product plant class after Operator {
-    dig private a
-    dig private b
-    constructor plant tool(a, b) {
-        if(a.constantValue = Operator.Constants.ZERO or b.constantValue = Operator.Constants.ZERO) {
-            harvest new Constant(0)
+    constructor plant tool(factors) {
+        this.factors plant []
+        this.constantFactor plant 1
+        each factor of factors {
+            if((type factor) = Constant.prototype) {
+                this.constantFactor *= factor.value
+                if(this.constantFactor = 0) {
+                    harvest new Constant(0)
+                }
+            } elseif((type factor) = Product.prototype) {
+                each factorFactor of factor.factors {
+                    arr.push(factorFactor)
+                }
+            } else {
+                this.factors.push(factor)
+            }
         }
-        if(b.constantValue = Operator.Constants.ONE) {
-            harvest a
+        if(this.factors.length = 0) {
+            harvest new Constant(this.constantFactor)
         }
-        if(a.constantValue = Operator.Constants.ONE) {
-            harvest b
-        }
-        this.a plant a
-        this.b plant b
     }
     dig differentiate plant tool(variable) {
-        dig resA plant this.a.differentiate(variable)
-        dig resB plant this.b.differentiate(variable)
-        harvest new Sum(new Product(resA, this.b), new Product(resB, this.a))
+        dig combos plant []
+        for(dig i plant 0, i < this.factors.length, i++) {
+            dig copy plant this.factors.clone()
+            copy[i] plant this.factors[i].differentiate(variable)
+            combos[i] plant new Product(copy)
+        }
+        harvest new Product(new Constant(this.constantFactor), new Sum(combos))
     }
-    dig print plant tool "('this.a.print()')('this.b.print()')"
+    dig print plant tool {
+        dig returning plant "'this.constantFactor'"
+        each factor of this.factors {
+            returning += "('factor.print()')"
+        }
+        harvest returning
+    }
+    dig equal plant tool(other) {
+        if((type other) != Product.prototype) {
+            harvest no
+        }
+        harvest this.concompareArrayHelper(this.factors, other.factors)
+    }
 }
 harvest Product

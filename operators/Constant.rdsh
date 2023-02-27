@@ -1,6 +1,5 @@
 dig Operator plant import "Operator"
 dig Constant plant class after Operator {
-    dig private value
     constructor plant tool(value) {
         this.value plant value
         if(value = 0) {
@@ -11,5 +10,8 @@ dig Constant plant class after Operator {
     }
     dig differentiate plant tool new Constant(0)
     dig print plant tool "'this.value'"
+    dig equal plant tool(other) {
+        harvest (type other) = Constant.prototype and other.value = this.value
+    }
 }
 harvest Constant

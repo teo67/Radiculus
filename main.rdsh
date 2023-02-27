@@ -3,9 +3,9 @@ dig Constant plant import "operators/Constant"
 dig Product plant import "operators/Product"
 dig Variable plant import "operators/Variable"
 dig Trig plant import "operators/functions/Trig"
+dig Ln plant import "operators/functions/Ln"
 
 dig x plant new Variable("x")
-
-dig myFunction plant new Trig.Tangent(new Product(new Constant(3), new Power(x, new Constant(2))))
+dig myFunction plant new Product([x, new Product([x, new Product([x, x, x]), x])])
 holler(myFunction.print())
 holler(myFunction.differentiate(x).print())

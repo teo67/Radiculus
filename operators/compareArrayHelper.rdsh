@@ -1,0 +1,19 @@
+harvest tool(me, other) {
+    if(other.length != me.length) {
+        harvest no
+    }
+    dig len plant me.length
+    each item of me {
+        dig good plant no
+        for(dig i plant 0, i < len, i++) {
+            if(item.combine(other[i]) = yes) {
+                good plant yes
+                cancel
+            }
+        }
+        if(not good) {
+            harvest no
+        }
+    }
+    harvest yes
+}

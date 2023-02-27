@@ -1,21 +1,53 @@
 dig Operator plant import "Operator"
+dig Constant plant import "Constant"
 dig Sum plant class after Operator {
-    dig private a
-    dig private b
-    constructor plant tool(a, b) {
-        if(a.constantValue = Operator.Constants.ZERO) {
-            harvest b
-        } if(b.constantValue = Operator.Constants.ZERO) {
-            harvest a
+    constructor plant tool(terms) {
+        this.terms plant []
+        each term of terms {
+            if(term.constantValue != Operator.Constants.ZERO) {
+                if((type term) = Sum.prototype) {
+                    each termTerm of term.terms {
+                        arr.push(termTerm)
+                    }
+                } else {
+                    this.terms.push(term)
+                }
+            }
         }
-        this.a plant a
-        this.b plant b
+        if(this.terms.length = 0) {
+            harvest new Constant(0)
+        }
+        if(this.terms.length = 1) {
+            harvest this.terms.first
+        }
+    }
+    dig private addTerm plant tool(adding) {
+        for(dig i plant 0, i < this.terms.length, i++) {
+            
+        }
     }
     dig differentiate plant tool(variable) {
-        dig resA plant this.a.differentiate(variable)
-        dig resB plant this.b.differentiate(variable)
-        harvest new Sum(resA, resB)
+        dig derivs plant []
+        each term of this.terms {
+            derivs.push(term.differentiate(variable))
+        }
+        harvest new Sum(derivs)
     }
-    dig print plant tool "'this.a.print()' + 'this.b.print()'"
+    dig print plant tool {
+        dig returning plant ""
+        for(dig i plant 0, i < this.terms.length, i++) {
+            if(i > 0) {
+                returning += " + "
+            }
+            returning += this.terms[i].print()
+        }
+        harvest returning
+    }
+    dig equal plant tool(other) {
+        if((type other) != Sum.prototype) {
+            harvest no
+        }
+        harvest compareArrayHelper(this.terms, other.terms)
+    }
 }
 harvest Sum

@@ -1,7 +1,6 @@
 dig Operator plant import "Operator"
 dig Constant plant import "Constant"
 dig Variable plant class after Operator {
-    dig private symbol
     constructor plant tool(symbol) {
         this.symbol plant symbol
     }
@@ -10,10 +9,7 @@ dig Variable plant class after Operator {
     }
     dig print plant tool this.symbol
     dig equal plant tool(other) {
-        if((type other) = Variable.prototype) {
-            harvest other.equal(this.symbol)
-        }
-        harvest this.symbol = other
+        harvest (type other) = Variable.prototype and other.symbol = this.symbol
     }
 }
 harvest Variable
