@@ -1,0 +1,22 @@
+dig Operator plant import "../Operator"
+dig Function plant import "Function"
+dig Constant plant import "../Constant"
+dig Product plant import "../Product"
+dig SimplePower plant class after Function {
+    dig private power
+    constructor plant tool(input, power) {
+        if(input.constantValue != Operator.Constants.NEITHER or power = 1) {
+            harvest input
+        }
+        if(power = 0) {
+            harvest new Constant(1)
+        }
+        super(input, null)
+        this.power plant power
+    }
+    dig differentiateFunction plant tool(input) {
+        harvest new Product(new Constant(this.power), new SimplePower(input, this.power - 1))
+    }
+    dig print plant tool "('this.input.print()')^'this.power'"
+}
+harvest SimplePower

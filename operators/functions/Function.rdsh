@@ -1,0 +1,17 @@
+dig Operator plant import "../Operator"
+dig Product plant import "../Product"
+harvest class after Operator {
+    dig private input
+    dig private functionName
+    constructor plant tool(input, functionName) {
+        this.input plant input
+        this.functionName plant functionName
+    }
+    dig differentiateFunction plant tool {
+        throw "Unable to differentiate an undefined function!"
+    }
+    dig differentiate plant tool(variable) {
+        harvest new Product(this.differentiateFunction(this.input), this.input.differentiate(variable)) # chain rule!!! #
+    }
+    dig print plant tool "'this.functionName'('this.input.print()')"
+}

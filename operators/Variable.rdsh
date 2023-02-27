@@ -1,0 +1,19 @@
+dig Operator plant import "Operator"
+dig Constant plant import "Constant"
+dig Variable plant class after Operator {
+    dig private symbol
+    constructor plant tool(symbol) {
+        this.symbol plant symbol
+    }
+    dig differentiate plant tool(variable) {
+        harvest new Constant(this.equal(variable) ? 1, 0)
+    }
+    dig print plant tool this.symbol
+    dig equal plant tool(other) {
+        if((type other) = Variable.prototype) {
+            harvest other.equal(this.symbol)
+        }
+        harvest this.symbol = other
+    }
+}
+harvest Variable

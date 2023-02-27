@@ -1,0 +1,8 @@
+harvest class {
+    dig differentiate plant tool(variable) {
+        throw "Unable to differentiate an undefined operator!"
+    }
+    dig print plant tool ""
+    dig static Constants plant enum { ZERO, ONE, NEITHER }
+    dig constantValue plant Constants.NEITHER
+}

@@ -1,0 +1,15 @@
+dig Operator plant import "Operator"
+dig Constant plant class after Operator {
+    dig private value
+    constructor plant tool(value) {
+        this.value plant value
+        if(value = 0) {
+            this.constantValue plant Operator.Constants.ZERO
+        } elseif(value = 1) {
+            this.constantValue plant Operator.Constants.ONE
+        }
+    }
+    dig differentiate plant tool new Constant(0)
+    dig print plant tool "'this.value'"
+}
+harvest Constant

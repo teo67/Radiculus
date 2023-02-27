@@ -1,0 +1,21 @@
+dig Operator plant import "Operator"
+dig Sum plant class after Operator {
+    dig private a
+    dig private b
+    constructor plant tool(a, b) {
+        if(a.constantValue = Operator.Constants.ZERO) {
+            harvest b
+        } if(b.constantValue = Operator.Constants.ZERO) {
+            harvest a
+        }
+        this.a plant a
+        this.b plant b
+    }
+    dig differentiate plant tool(variable) {
+        dig resA plant this.a.differentiate(variable)
+        dig resB plant this.b.differentiate(variable)
+        harvest new Sum(resA, resB)
+    }
+    dig print plant tool "'this.a.print()' + 'this.b.print()'"
+}
+harvest Sum
