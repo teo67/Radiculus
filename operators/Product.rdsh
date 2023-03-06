@@ -1,50 +1,83 @@
-dig Operator plant import "Operator"
-dig Constant plant import "Constant"
-dig Sum plant import "Sum"
-dig compareArrayHelper plant import "compareArrayHelper"
-dig Product plant class after Operator {
+dig Operator plant import "../helper/Operator"
+dig operators plant import "../helper/operators"
+dig compareArrayHelper plant import "../helper/compareArrayHelper"
+operators.Product plant class after Operator {
     constructor plant tool(factors) {
         this.factors plant []
+        dig powers plant []
         this.constantFactor plant 1
         each factor of factors {
-            if((type factor) = Constant.prototype) {
+            if((type factor) = operators.Constant.prototype) {
                 this.constantFactor *= factor.value
                 if(this.constantFactor = 0) {
-                    harvest new Constant(0)
+                    harvest new operators.Constant(0)
                 }
-            } elseif((type factor) = Product.prototype) {
+            } elseif((type factor) = operators.Product.prototype) {
+                this.constantFactor *= factor.constantFactor
                 each factorFactor of factor.factors {
-                    arr.push(factorFactor)
+                    this.addToFactors(this.factors, powers, factorFactor)
                 }
             } else {
-                this.factors.push(factor)
+                this.addToFactors(this.factors, powers, factor)
             }
         }
-        if(this.factors.length = 0) {
-            harvest new Constant(this.constantFactor)
+        for(dig i plant 0, i < this.factors.length, i++) {
+            this.factors[i] plant new operators.Power(this.factors[i], new operators.Sum(powers[i]))
         }
+        if(this.factors.length = 0) {
+            harvest new operators.Constant(this.constantFactor)
+        }
+        if(this.factors.length = 1 and this.constantFactor = 1) {
+            harvest this.factors.first
+        }
+    }
+    dig private addToFactors plant tool(factors, power, value) {
+        dig typ plant type value
+        dig isPower plant typ = operators.Power.prototype
+        dig addingPower plant isPower ? value.b, new operators.Constant(1)
+        dig realValue plant isPower ? value.a, value
+        for(dig i plant 0, i < factors.length, i++) {
+            if(realValue.equal(factors[i])) {
+                power[i].push(addingPower)
+                end
+            }
+        }
+        factors.push(realValue)
+        power.push([addingPower])
+    }
+    dig cloneWithDifferentFactor plant tool(factor) {
+        harvest ({
+            dig constantFactor plant factor
+            dig factors plant this.factors
+        } after operators.Product.prototype)
     }
     dig differentiate plant tool(variable) {
         dig combos plant []
         for(dig i plant 0, i < this.factors.length, i++) {
             dig copy plant this.factors.clone()
             copy[i] plant this.factors[i].differentiate(variable)
-            combos[i] plant new Product(copy)
+            combos[i] plant new operators.Product(copy)
         }
-        harvest new Product(new Constant(this.constantFactor), new Sum(combos))
+        harvest new operators.Product([new operators.Constant(this.constantFactor), new operators.Sum(combos)])
     }
     dig print plant tool {
-        dig returning plant "'this.constantFactor'"
+        if(this.constantFactor = 0) {
+            harvest "0"
+        }
+        dig returning plant ""
+        if(this.constantFactor != 1) {
+            returning += this.constantFactor
+        } 
         each factor of this.factors {
             returning += "('factor.print()')"
         }
         harvest returning
     }
     dig equal plant tool(other) {
-        if((type other) != Product.prototype) {
+        if((type other) != operators.Product.prototype) {
             harvest no
         }
-        harvest this.concompareArrayHelper(this.factors, other.factors)
+        harvest compareArrayHelper(this.factors, other.factors)
     }
 }
-harvest Product
+harvest operators.Product

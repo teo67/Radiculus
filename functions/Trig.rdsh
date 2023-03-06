@@ -1,0 +1,27 @@
+dig Function plant import "../helper/Function"
+dig operators plant import "../helper/operators"
+dig functions plant import "../helper/functions"
+functions.Sine plant class after Function {
+    constructor plant tool(input) {
+        super(input, "sin")
+    }
+}
+functions.Cosine plant class after Function {
+    constructor plant tool(input) {
+        super(input, "cos")
+    }
+}
+functions.Sine.prototype.differentiateFunction plant tool(input) {
+    harvest new functions.Cosine(input)
+}
+functions.Cosine.prototype.differentiateFunction plant tool(input) {
+    harvest new operators.Product([new operators.Constant(-1), new functions.Sine(input)])
+}
+functions.Tangent plant class after Function {
+    constructor plant tool(input) {
+        super(input, "tan")
+    }
+    dig differentiateFunction plant tool(input) {
+        harvest new operators.Power(new functions.Cosine(input), new operators.Constant(-2))
+    }
+}

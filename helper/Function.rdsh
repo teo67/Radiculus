@@ -1,5 +1,5 @@
-dig Operator plant import "../Operator"
-dig Product plant import "../Product"
+dig Operator plant import "Operator"
+dig operators plant import "operators"
 harvest class after Operator {
     constructor plant tool(input, functionName) {
         this.input plant input
@@ -9,7 +9,7 @@ harvest class after Operator {
         throw "Unable to differentiate an undefined function!"
     }
     dig differentiate plant tool(variable) {
-        harvest new Product([this.differentiateFunction(this.input), this.input.differentiate(variable)]) # chain rule!!! #
+        harvest new operators.Product([this.differentiateFunction(this.input), this.input.differentiate(variable)]) # chain rule!!! #
     }
     dig equal plant tool(other) {
         harvest (type this) = (type other) and this.input.equal(other.input)

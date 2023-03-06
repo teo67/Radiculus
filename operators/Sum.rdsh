@@ -1,37 +1,64 @@
-dig Operator plant import "Operator"
-dig Constant plant import "Constant"
-dig Sum plant class after Operator {
+dig Operator plant import "../helper/Operator"
+dig operators plant import "../helper/operators"
+dig compareArrayHelper plant import "../helper/compareArrayHelper"
+operators.Sum plant class after Operator {
     constructor plant tool(terms) {
         this.terms plant []
+        dig coeffs plant []
         each term of terms {
             if(term.constantValue != Operator.Constants.ZERO) {
-                if((type term) = Sum.prototype) {
+                if((type term) = operators.Sum.prototype) {
                     each termTerm of term.terms {
-                        arr.push(termTerm)
+                        this.addToTerms(this.terms, coeffs, termTerm)
                     }
                 } else {
-                    this.terms.push(term)
+                    this.addToTerms(this.terms, coeffs, term)
                 }
             }
         }
+        for(dig i plant 0, i < this.terms.length, i++) {
+            dig typ plant type this.terms[i]
+            if(typ = operators.Constant.prototype) {
+                this.terms[i] plant new operators.Constant(coeffs[i])
+            } elseif(typ = operators.Product.prototype) {
+                this.terms[i] plant this.terms[i].cloneWithDifferentFactor(coeffs[i])
+            } else {
+                this.terms[i] plant new operators.Product([new operators.Constant(coeffs[i]), this.terms[i]])
+            }
+        }
         if(this.terms.length = 0) {
-            harvest new Constant(0)
+            harvest new operators.Constant(0)
         }
         if(this.terms.length = 1) {
             harvest this.terms.first
         }
     }
-    dig private addTerm plant tool(adding) {
-        for(dig i plant 0, i < this.terms.length, i++) {
-            
+    dig private addToTerms plant tool(terms, coeffs, value) {
+        dig coeff plant 1
+        dig realVal plant value
+        if((type value) = operators.Constant.prototype) {
+            coeff plant value.value
+        } elseif((type value) = operators.Product.prototype) {
+            coeff plant value.constantFactor
+            if(value.factors.length = 1) {
+                realVal plant value.factors.first
+            }
         }
+        for(dig i plant 0, i < terms.length, i++) {
+            if(realVal.equal(terms[i])) {
+                coeffs[i] += coeff
+                end
+            }
+        }
+        terms.push(realVal)
+        coeffs.push(coeff)
     }
     dig differentiate plant tool(variable) {
         dig derivs plant []
         each term of this.terms {
             derivs.push(term.differentiate(variable))
         }
-        harvest new Sum(derivs)
+        harvest new operators.Sum(derivs)
     }
     dig print plant tool {
         dig returning plant ""
@@ -44,10 +71,10 @@ dig Sum plant class after Operator {
         harvest returning
     }
     dig equal plant tool(other) {
-        if((type other) != Sum.prototype) {
+        if((type other) != operators.Sum.prototype) {
             harvest no
         }
         harvest compareArrayHelper(this.terms, other.terms)
     }
 }
-harvest Sum
+harvest operators.Sum
