@@ -1,4 +1,0 @@
-each source of system.readDir(system.getDir(PATH) + "/functions") {
-    import "functions/" + source
-}
-harvest import "helper/functions"

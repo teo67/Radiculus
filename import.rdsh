@@ -1,0 +1,10 @@
+each source of system.readDir(system.getDir(PATH) + "/operators") {
+    import "operators/" + source
+}
+each source of system.readDir(system.getDir(PATH) + "/functions") {
+    import "functions/" + source
+}
+harvest {
+    dig functions plant import "helper/functions"
+    dig operators plant import "helper/operators"
+}

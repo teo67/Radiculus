@@ -1,8 +1,11 @@
-dig operators plant import "operators"
-dig functions plant import "functions"
+dig _import plant import "import"
+dig operators plant _import.operators
+dig functions plant _import.functions
 
 dig x plant new operators.Variable("x")
-dig y plant new operators.Variable("y")
-dig myFunction plant new operators.Product([new operators.Power(x, new operators.Constant(2)), new operators.Power(y, new operators.Constant(2))])
-holler(myFunction.print())
-holler(myFunction.differentiate(x).print())
+dig fun plant new functions.Ln(new functions.Cosine(x))
+
+repeat 200 {
+    holler(fun.print())
+    fun plant fun.differentiate(x)
+}

@@ -12,4 +12,3 @@ operators.Variable plant class after Operator {
         harvest (type other) = operators.Variable.prototype and other.symbol = this.symbol
     }
 }
-harvest operators.Variable

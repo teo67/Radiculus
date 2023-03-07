@@ -27,4 +27,3 @@ operators.Power plant class after Operator {
         harvest no
     }
 }
-harvest operators.Power

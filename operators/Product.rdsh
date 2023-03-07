@@ -80,4 +80,3 @@ operators.Product plant class after Operator {
         harvest compareArrayHelper(this.factors, other.factors)
     }
 }
-harvest operators.Product

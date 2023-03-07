@@ -1,4 +1,0 @@
-each source of system.readDir(system.getDir(PATH) + "/operators") {
-    import "operators/" + source
-}
-harvest import "helper/operators"

@@ -15,4 +15,3 @@ operators.Constant plant class after Operator {
         harvest (type other) = operators.Constant.prototype
     }
 }
-harvest operators.Constant

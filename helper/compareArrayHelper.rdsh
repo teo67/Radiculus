@@ -6,7 +6,7 @@ harvest tool(me, other) {
     each item of me {
         dig good plant no
         for(dig i plant 0, i < len, i++) {
-            if(item.combine(other[i]) = yes) {
+            if(item.equal(other[i])) {
                 good plant yes
                 cancel
             }
