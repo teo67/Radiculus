@@ -2,10 +2,8 @@ dig _import plant import "import"
 dig operators plant _import.operators
 dig functions plant _import.functions
 
-dig x plant new operators.Variable("x")
-dig fun plant new functions.Ln(new functions.Cosine(x))
-
-repeat 200 {
-    holler(fun.print())
-    fun plant fun.differentiate(x)
-}
+dig x plant new operators.SimpleVariable("x")
+dig f plant new operators.NestedVariable(new operators.Power(x, new operators.Constant(2)))
+dig g plant new operators.NestedVariable(new functions.Sine(f))
+holler(g.print())
+holler(g.differentiate(x).print())

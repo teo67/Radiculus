@@ -1,6 +1,7 @@
 dig Operator plant import "../helper/Operator"
 dig operators plant import "../helper/operators"
-operators.Variable plant class after Operator {
+operators.SimpleVariable plant class after Operator {
+    dig symbol plant null
     constructor plant tool(symbol) {
         this.symbol plant symbol
     }
@@ -9,6 +10,23 @@ operators.Variable plant class after Operator {
     }
     dig print plant tool this.symbol
     dig equal plant tool(other) {
-        harvest (type other) = operators.Variable.prototype and other.symbol = this.symbol
+        harvest this = other
+    }
+}
+operators.NestedVariable plant class after Operator {
+    dig nested plant null
+    constructor plant tool(nested) {
+        this.nested plant nested
+        this.constantValue plant nested.constantValue
+    }
+    dig differentiate plant tool(variable) {
+        if(this.equal(variable)) {
+            harvest 1
+        }
+        harvest this.nested.differentiate(variable)
+    }
+    dig print plant tool this.nested.print()
+    dig equal plant tool(other) {
+        harvest this = other
     }
 }
